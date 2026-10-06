@@ -1,0 +1,1748 @@
+HTML = """
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>💊 MediTrack - Medicine Reminder</title>
+
+
+<!-- Poppins Font -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =====================================================
+   COLOR THEME
+===================================================== */
+
+:root {
+
+    --sapphire: #245A9C;
+
+    --sapphire-dark: #163F70;
+
+    --sapphire-light: #E8F1FA;
+
+    --background: #F4F8FC;
+
+    --card: #FFFFFF;
+
+    --text: #24384D;
+
+    --muted: #718096;
+
+    --border: #DCE7F2;
+
+    --soft-blue: #F0F6FC;
+
+}
+
+
+/* =====================================================
+   GENERAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family: 'Poppins', sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #F4F8FC 0%,
+            #EDF5FC 50%,
+            #F8FAFC 100%
+        );
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+}
+
+
+/* =====================================================
+   DECORATIVE BACKGROUND
+===================================================== */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    width: 250px;
+
+    height: 250px;
+
+    border-radius: 50%;
+
+    background: #E4EFFA;
+
+    top: -100px;
+
+    left: -100px;
+
+    z-index: -1;
+
+}
+
+
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    width: 280px;
+
+    height: 280px;
+
+    border-radius: 50%;
+
+    background: #EAF3FA;
+
+    bottom: -130px;
+
+    right: -100px;
+
+    z-index: -1;
+
+}
+
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.container {
+
+    width: 92%;
+
+    max-width: 1150px;
+
+    margin: auto;
+
+    padding: 30px 0 20px;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 28px;
+
+    padding: 5px 5px;
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.brand-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--sapphire-light);
+
+    border-radius: 17px;
+
+    font-size: 30px;
+
+    box-shadow:
+        0 6px 18px rgba(36,90,156,0.10);
+
+}
+
+
+.brand h1 {
+
+    margin: 0;
+
+    font-size: 28px;
+
+    color: var(--sapphire-dark);
+
+    letter-spacing: -0.5px;
+
+}
+
+
+.brand p {
+
+    margin: 3px 0 0;
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+}
+
+
+.clock {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    padding: 11px 18px;
+
+    border-radius: 14px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--sapphire-dark);
+
+    box-shadow:
+        0 5px 18px rgba(30,70,110,0.06);
+
+}
+
+
+/* =====================================================
+   WELCOME
+===================================================== */
+
+.welcome {
+
+    margin-bottom: 20px;
+
+}
+
+
+.welcome h2 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+    color: var(--sapphire-dark);
+
+}
+
+
+.welcome p {
+
+    margin: 4px 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   CUTE DOODLE
+===================================================== */
+
+.doodle {
+
+    float: right;
+
+    font-size: 45px;
+
+    margin-right: 20px;
+
+    opacity: 0.8;
+
+}
+
+
+/* =====================================================
+   REMINDER
+===================================================== */
+
+.reminder {
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            #E9F3FC,
+            #F7FBFF
+        );
+
+    border: 1px solid #C9DDEE;
+
+    border-left: 5px solid var(--sapphire);
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(36,90,156,0.08);
+
+}
+
+
+.reminder h2 {
+
+    margin-top: 0;
+
+    color: var(--sapphire-dark);
+
+    font-size: 20px;
+
+}
+
+
+.reminder-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+}
+
+
+.medicine-doodle {
+
+    width: 95px;
+
+    height: 95px;
+
+    background: white;
+
+    border-radius: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 55px;
+
+    box-shadow:
+        0 5px 15px rgba(36,90,156,0.08);
+
+}
+
+
+.reminder-info {
+
+    flex: 1;
+
+}
+
+
+.reminder-info p {
+
+    margin: 7px 0;
+
+    font-size: 14px;
+
+}
+
+
+.take-btn {
+
+    background: var(--sapphire);
+
+    color: white;
+
+    padding: 12px 22px;
+
+    border-radius: 25px;
+
+    font-weight: 600;
+
+}
+
+
+.take-btn:hover {
+
+    background: var(--sapphire-dark);
+
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.card {
+
+    background: rgba(255,255,255,0.92);
+
+    border: 1px solid var(--border);
+
+    padding: 24px;
+
+    border-radius: 18px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 7px 25px rgba(40,70,100,0.055);
+
+}
+
+
+.card-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.card-title span {
+
+    font-size: 22px;
+
+}
+
+
+.card h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    color: var(--sapphire-dark);
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 14px;
+
+}
+
+
+.input-group label {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+    margin-bottom: 6px;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid var(--border);
+
+    background: #FBFDFF;
+
+    border-radius: 10px;
+
+    font-family: 'Poppins';
+
+    font-size: 13px;
+
+    color: var(--text);
+
+    outline: none;
+
+}
+
+
+input:focus {
+
+    border-color: var(--sapphire);
+
+    box-shadow:
+        0 0 0 3px rgba(36,90,156,0.08);
+
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button {
+
+    border: none;
+
+    font-family: 'Poppins';
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+button:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+.add-btn {
+
+    margin-top: 16px;
+
+    background: var(--sapphire);
+
+    color: white;
+
+    padding: 11px 20px;
+
+    border-radius: 9px;
+
+    font-weight: 500;
+
+}
+
+
+.add-btn:hover {
+
+    background: var(--sapphire-dark);
+
+}
+
+
+.test-btn {
+
+    margin-top: 16px;
+
+    margin-left: 7px;
+
+    background: var(--sapphire-light);
+
+    color: var(--sapphire-dark);
+
+    padding: 11px 18px;
+
+    border-radius: 9px;
+
+}
+
+
+.notification-btn {
+
+    margin-top: 16px;
+
+    margin-left: 7px;
+
+    background: #F1F5F9;
+
+    color: #526579;
+
+    padding: 11px 18px;
+
+    border-radius: 9px;
+
+}
+
+
+/* =====================================================
+   MEDICINE LIST
+===================================================== */
+
+.medicine {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: var(--soft-blue);
+
+    border: 1px solid #E3EDF6;
+
+    padding: 16px;
+
+    border-radius: 13px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.medicine-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.pill-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 21px;
+
+}
+
+
+.medicine-info {
+
+    line-height: 1.7;
+
+    font-size: 13px;
+
+}
+
+
+.medicine-info strong {
+
+    color: var(--sapphire-dark);
+
+    font-size: 14px;
+
+}
+
+
+.delete-btn {
+
+    background: #F6EDEF;
+
+    color: #9A5663;
+
+    padding: 8px 13px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+.history-item {
+
+    display: grid;
+
+    grid-template-columns:
+        1.4fr 1fr 1fr 1fr;
+
+    gap: 10px;
+
+    align-items: center;
+
+    background: #FAFCFE;
+
+    border-bottom: 1px solid var(--border);
+
+    padding: 13px 8px;
+
+    font-size: 12px;
+
+}
+
+
+.history-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.taken {
+
+    display: inline-block;
+
+    background: #E5F2EC;
+
+    color: #3F7658;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+
+    text-align: center;
+
+    padding: 25px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   CUTE SIDE MESSAGE
+===================================================== */
+
+.health-note {
+
+    text-align: center;
+
+    background: #F8FBFE;
+
+    border: 1px dashed #C8DCEB;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    margin-top: 10px;
+
+}
+
+
+.health-note .cute {
+
+    font-size: 30px;
+
+}
+
+
+.health-note p {
+
+    margin: 5px 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    font-style: italic;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer {
+
+    text-align: center;
+
+    color: #8A99A8;
+
+    font-size: 11px;
+
+    padding: 15px 0 25px;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width: 700px) {
+
+    .header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .clock {
+
+        align-self: stretch;
+
+        text-align: center;
+
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .reminder-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .medicine {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+    }
+
+    .history-item {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes softPulse {
+
+    0% {
+        box-shadow:
+            0 8px 25px rgba(36,90,156,0.08);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 30px rgba(36,90,156,0.16);
+    }
+
+    100% {
+        box-shadow:
+            0 8px 25px rgba(36,90,156,0.08);
+    }
+
+}
+
+
+.reminder {
+
+    animation:
+        softPulse 3s infinite;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            💊
+        </div>
+
+        <div>
+
+            <h1>MediTrack</h1>
+
+            <p>
+                Smart Medicine Reminder System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="clock">
+
+        🕐 IST:
+        <span id="clock">
+            Loading...
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     WELCOME
+===================================================== -->
+
+<div class="welcome">
+
+    <div class="doodle">
+        🌿
+    </div>
+
+    <h2>
+        Good Morning! ☀️
+    </h2>
+
+    <p>
+        Take care of your health, one reminder at a time. ♡
+    </p>
+
+</div>
+
+
+
+<!-- =====================================================
+     REMINDER
+===================================================== -->
+
+<div id="reminderArea">
+
+
+{% if reminder["active"] %}
+
+<div class="reminder">
+
+    <h2>
+        🔔 Medicine Reminder
+    </h2>
+
+
+    <div class="reminder-content">
+
+
+        <div class="medicine-doodle">
+
+            💊
+
+        </div>
+
+
+        <div class="reminder-info">
+
+            <p>
+                <strong>Medicine:</strong>
+                {{ reminder["medicine"] }}
+            </p>
+
+            <p>
+                <strong>Dosage:</strong>
+                {{ reminder["dosage"] }}
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                {{ reminder["time"] }}
+            </p>
+
+        </div>
+
+
+        <button
+            class="take-btn"
+            onclick="takeMedicine({{ reminder['id'] }})">
+
+            ✓ Mark as Taken
+
+        </button>
+
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+
+
+<!-- =====================================================
+     ADD MEDICINE
+===================================================== -->
+
+<div class="card">
+
+
+    <div class="card-title">
+
+        <span>➕</span>
+
+        <h2>
+            Add New Medicine
+        </h2>
+
+    </div>
+
+
+    <form
+        action="/add"
+        method="POST">
+
+
+        <div class="form-grid">
+
+
+            <div class="input-group">
+
+                <label>
+                    Medicine Name
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="e.g. Paracetamol"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Dosage
+                </label>
+
+                <input
+                    type="text"
+                    name="dosage"
+                    placeholder="e.g. 1 tablet"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Reminder Time
+                </label>
+
+                <input
+                    type="time"
+                    name="time"
+                    required
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="add-btn">
+
+            + Add Medicine
+
+        </button>
+
+
+        <button
+            type="button"
+            class="test-btn"
+            onclick="testReminder()">
+
+            🧪 Test Reminder
+
+        </button>
+
+
+        <button
+            type="button"
+            class="notification-btn"
+            onclick="enableNotifications()">
+
+            🔔 Notifications
+
+        </button>
+
+
+    </form>
+
+</div>
+
+
+
+<!-- =====================================================
+     SCHEDULED MEDICINES
+===================================================== -->
+
+<div class="card">
+
+
+    <div class="card-title">
+
+        <span>📋</span>
+
+        <h2>
+            Scheduled Medicines
+        </h2>
+
+    </div>
+
+
+    <div id="medicineList">
+
+
+    {% if medicines %}
+
+
+        {% for medicine in medicines %}
+
+
+        <div class="medicine">
+
+
+            <div class="medicine-left">
+
+
+                <div class="pill-icon">
+                    💊
+                </div>
+
+
+                <div class="medicine-info">
+
+                    <strong>
+                        {{ medicine["name"] }}
+                    </strong>
+
+                    <br>
+
+                    Dosage:
+                    {{ medicine["dosage"] }}
+
+                    <br>
+
+                    ⏰
+                    {{ medicine["time"] }}
+
+                </div>
+
+
+            </div>
+
+
+            <a
+                href="/delete/{{ medicine['id'] }}">
+
+                <button
+                    class="delete-btn">
+
+                    🗑 Delete
+
+                </button>
+
+            </a>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            🌱
+
+            <br>
+
+            No medicines scheduled yet.
+
+        </div>
+
+
+    {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     HISTORY
+===================================================== -->
+
+<div class="card">
+
+
+    <div class="card-title">
+
+        <span>🕘</span>
+
+        <h2>
+            Medicine History
+        </h2>
+
+    </div>
+
+
+    {% if history %}
+
+
+        {% for item in history %}
+
+
+        <div class="history-item">
+
+
+            <div>
+
+                💊
+                <strong>
+                    {{ item["medicine_name"] }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                {{ item["dosage"] }}
+
+            </div>
+
+
+            <div>
+
+                ⏰
+                {{ item["taken_time"] }}
+
+            </div>
+
+
+            <div>
+
+                <span class="taken">
+                    ✓ Taken
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            No medicine history yet.
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+
+<!-- =====================================================
+     CUTE HEALTH MESSAGE
+===================================================== -->
+
+<div class="health-note">
+
+    <div class="cute">
+        🌿 💊 🐻
+    </div>
+
+    <p>
+        "Small steps every day lead to a healthier you." ♡
+    </p>
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="footer">
+
+    💊 MediTrack
+
+    &nbsp; • &nbsp;
+
+    Python + Flask + SQLite
+
+    <br>
+
+    Smart Medicine Reminder System
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+// =====================================================
+// IST CLOCK
+// =====================================================
+
+function updateClock() {
+
+    const now = new Date();
+
+    const time =
+        now.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+                timeZone: "Asia/Kolkata"
+            }
+        );
+
+    document.getElementById(
+        "clock"
+    ).innerText = time;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+
+// =====================================================
+// NOTIFICATIONS
+// =====================================================
+
+function enableNotifications() {
+
+    if (!("Notification" in window)) {
+
+        alert(
+            "Browser notifications are not supported."
+        );
+
+        return;
+
+    }
+
+
+    Notification.requestPermission()
+
+        .then(function(permission) {
+
+            if (permission === "granted") {
+
+                alert(
+                    "✓ Notifications enabled!"
+                );
+
+            }
+
+        });
+
+}
+
+
+
+// =====================================================
+// REMINDER CHECK
+// =====================================================
+
+let lastReminderId = 0;
+
+
+function checkReminder() {
+
+    fetch("/api/reminder")
+
+        .then(response =>
+            response.json()
+        )
+
+        .then(data => {
+
+
+            if (
+                data.active &&
+                data.id !== lastReminderId
+            ) {
+
+
+                lastReminderId =
+                    data.id;
+
+
+                showReminder(data);
+
+
+                if (
+                    Notification.permission
+                    === "granted"
+                ) {
+
+
+                    new Notification(
+                        "💊 Medicine Reminder",
+                        {
+                            body:
+                                data.medicine +
+                                " - " +
+                                data.dosage
+                        }
+                    );
+
+
+                }
+
+
+                if (
+                    "speechSynthesis"
+                    in window
+                ) {
+
+
+                    const speech =
+                        new SpeechSynthesisUtterance(
+
+                            "Time to take " +
+                            data.medicine +
+                            ". Dosage: " +
+                            data.dosage
+
+                        );
+
+
+                    speechSynthesis.speak(
+                        speech
+                    );
+
+
+                }
+
+            }
+
+        });
+
+}
+
+
+
+// =====================================================
+// SHOW REMINDER
+// =====================================================
+
+function showReminder(data) {
+
+
+    const area =
+        document.getElementById(
+            "reminderArea"
+        );
+
+
+    area.innerHTML = `
+
+        <div class="reminder">
+
+            <h2>
+                🔔 Medicine Reminder
+            </h2>
+
+            <div class="reminder-content">
+
+                <div class="medicine-doodle">
+                    💊
+                </div>
+
+                <div class="reminder-info">
+
+                    <p>
+                        <strong>Medicine:</strong>
+                        ${data.medicine}
+                    </p>
+
+                    <p>
+                        <strong>Dosage:</strong>
+                        ${data.dosage}
+                    </p>
+
+                    <p>
+                        <strong>Time:</strong>
+                        ${data.time}
+                    </p>
+
+                </div>
+
+                <button
+                    class="take-btn"
+                    onclick="takeMedicine(${data.id})">
+
+                    ✓ Mark as Taken
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+// =====================================================
+// TEST REMINDER
+// =====================================================
+
+function testReminder() {
+
+
+    fetch("/api/test")
+
+        .then(response =>
+            response.json()
+        )
+
+        .then(data => {
+
+
+            showReminder(data);
+
+
+            lastReminderId =
+                data.id;
+
+
+            if (
+                Notification.permission
+                === "granted"
+            ) {
+
+
+                new Notification(
+                    "💊 Test Medicine Reminder",
+                    {
+                        body:
+                            data.medicine +
+                            " - " +
+                            data.dosage
+                    }
+                );
+
+
+            }
+
+
+            if (
+                "speechSynthesis"
+                in window
+            ) {
+
+
+                const speech =
+                    new SpeechSynthesisUtterance(
+
+                        "Test reminder. Time to take " +
+                        data.medicine
+
+                    );
+
+
+                speechSynthesis.speak(
+                    speech
+                );
+
+
+            }
+
+        });
+
+}
+
+
+
+// =====================================================
+// MARK AS TAKEN
+// =====================================================
+
+function takeMedicine(id) {
+
+
+    fetch(
+        "/api/take/" + id,
+        {
+            method: "POST"
+        }
+    )
+
+
+    .then(response =>
+        response.json()
+    )
+
+
+    .then(data => {
+
+
+        if (data.success) {
+
+
+            document.getElementById(
+                "reminderArea"
+            ).innerHTML = "";
+
+
+            location.reload();
+
+
+        }
+
+    });
+
+}
+
+
+
+// =====================================================
+// CHECK EVERY 5 SECONDS
+// =====================================================
+
+setInterval(
+    checkReminder,
+    5000
+);
+
+
+</script>
+
+
+</body>
+
+</html>
+
+"""
