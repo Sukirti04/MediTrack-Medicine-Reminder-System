@@ -1,4 +1,3 @@
-
 from flask import Flask, request, redirect, render_template, jsonify
 import sqlite3
 import threading
@@ -31,13 +30,14 @@ latest_reminder = {
 
 
 # ============================================================
-# DATABASE
+# DATABASE CONNECTION
 # ============================================================
 
 def get_connection():
 
     connection = sqlite3.connect(
         DATABASE,
+        timeout=10,
         check_same_thread=False
     )
 
@@ -46,49 +46,48 @@ def get_connection():
     return connection
 
 
+# ============================================================
+# CREATE DATABASE TABLES
+# ============================================================
+
 def create_tables():
 
     connection = get_connection()
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS medicines (
+    try:
 
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS medicines (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                dosage TEXT NOT NULL,
+                time TEXT NOT NULL,
+                last_notified TEXT DEFAULT ''
+            )
+        """)
 
-            name TEXT NOT NULL,
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                medicine_name TEXT NOT NULL,
+                dosage TEXT NOT NULL,
+                scheduled_time TEXT NOT NULL,
+                taken_time TEXT NOT NULL,
+                date TEXT NOT NULL
+            )
+        """)
 
-            dosage TEXT NOT NULL,
+        connection.commit()
 
-            time TEXT NOT NULL,
+        print("Database tables checked successfully.")
 
-            last_notified TEXT DEFAULT ''
+    except Exception as error:
 
-        )
-    """)
+        print("Database table error:", error)
 
+    finally:
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS history (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            medicine_name TEXT NOT NULL,
-
-            dosage TEXT NOT NULL,
-
-            scheduled_time TEXT NOT NULL,
-
-            taken_time TEXT NOT NULL,
-
-            date TEXT NOT NULL
-
-        )
-    """)
-
-
-    connection.commit()
-
-    connection.close()
+        connection.close()
 
 
 create_tables()
@@ -102,80 +101,107 @@ def add_medicine(name, dosage, medicine_time):
 
     connection = get_connection()
 
-    connection.execute(
-        """
-        INSERT INTO medicines
-        (name, dosage, time)
-        VALUES (?, ?, ?)
-        """,
-        (
-            name,
-            dosage,
-            medicine_time
+    try:
+
+        connection.execute(
+            """
+            INSERT INTO medicines
+            (name, dosage, time)
+            VALUES (?, ?, ?)
+            """,
+            (
+                name,
+                dosage,
+                medicine_time
+            )
         )
-    )
 
-    connection.commit()
+        connection.commit()
 
-    connection.close()
+    except Exception as error:
+
+        print("Add medicine error:", error)
+        raise
+
+    finally:
+
+        connection.close()
 
 
 def get_medicines():
 
     connection = get_connection()
 
-    medicines = connection.execute(
-        """
-        SELECT *
-        FROM medicines
-        ORDER BY time
-        """
-    ).fetchall()
+    try:
 
-    connection.close()
+        medicines = connection.execute(
+            """
+            SELECT *
+            FROM medicines
+            ORDER BY time
+            """
+        ).fetchall()
 
-    return medicines
+        return medicines
+
+    finally:
+
+        connection.close()
 
 
 def delete_medicine(medicine_id):
 
     connection = get_connection()
 
-    connection.execute(
-        """
-        DELETE FROM medicines
-        WHERE id = ?
-        """,
-        (medicine_id,)
-    )
+    try:
 
-    connection.commit()
+        connection.execute(
+            """
+            DELETE FROM medicines
+            WHERE id = ?
+            """,
+            (medicine_id,)
+        )
 
-    connection.close()
+        connection.commit()
+
+    except Exception as error:
+
+        print("Delete medicine error:", error)
+        raise
+
+    finally:
+
+        connection.close()
 
 
-def update_last_notified(
-    medicine_id,
-    date
-):
+def update_last_notified(medicine_id, date):
 
     connection = get_connection()
 
-    connection.execute(
-        """
-        UPDATE medicines
-        SET last_notified = ?
-        WHERE id = ?
-        """,
-        (
-            date,
-            medicine_id
+    try:
+
+        connection.execute(
+            """
+            UPDATE medicines
+            SET last_notified = ?
+            WHERE id = ?
+            """,
+            (
+                date,
+                medicine_id
+            )
         )
-    )
 
-    connection.commit()
+        connection.commit()
 
-    connection.close()
+    except Exception as error:
+
+        print("Update notification error:", error)
+
+    finally:
+
+        connection.close()
 
 
 # ============================================================
@@ -186,17 +212,21 @@ def get_history():
 
     connection = get_connection()
 
-    history = connection.execute(
-        """
-        SELECT *
-        FROM history
-        ORDER BY id DESC
-        """
-    ).fetchall()
+    try:
 
-    connection.close()
+        history = connection.execute(
+            """
+            SELECT *
+            FROM history
+            ORDER BY id DESC
+            """
+        ).fetchall()
 
-    return history
+        return history
+
+    finally:
+
+        connection.close()
 
 
 def add_history(
@@ -209,30 +239,50 @@ def add_history(
 
     connection = get_connection()
 
-    connection.execute(
-        """
-        INSERT INTO history
-        (
-            medicine_name,
-            dosage,
-            scheduled_time,
-            taken_time,
-            date
-        )
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        (
-            medicine_name,
-            dosage,
-            scheduled_time,
-            now.strftime("%H:%M"),
-            now.strftime("%Y-%m-%d")
-        )
-    )
+    try:
 
-    connection.commit()
+        connection.execute(
+            """
+            INSERT INTO history
+            (
+                medicine_name,
+                dosage,
+                scheduled_time,
+                taken_time,
+                date
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                medicine_name,
+                dosage,
+                scheduled_time,
+                now.strftime("%H:%M"),
+                now.strftime("%Y-%m-%d")
+            )
+        )
 
-    connection.close()
+        connection.commit()
+
+        print(
+            "History saved:",
+            medicine_name,
+            now.strftime("%Y-%m-%d %H:%M")
+        )
+
+        return True
+
+    except Exception as error:
+
+        print("HISTORY SAVE ERROR:", error)
+
+        connection.rollback()
+
+        return False
+
+    finally:
+
+        connection.close()
 
 
 # ============================================================
@@ -248,11 +298,8 @@ def home():
 
     return render_template(
         "index.html",
-
         medicines=medicines,
-
         history=history,
-
         reminder=latest_reminder
     )
 
@@ -267,21 +314,27 @@ def home():
 )
 def add():
 
-    name = request.form["name"]
+    try:
 
-    dosage = request.form["dosage"]
+        name = request.form["name"]
 
-    medicine_time = request.form["time"]
+        dosage = request.form["dosage"]
 
+        medicine_time = request.form["time"]
 
-    add_medicine(
-        name,
-        dosage,
-        medicine_time
-    )
+        add_medicine(
+            name,
+            dosage,
+            medicine_time
+        )
 
+        return redirect("/")
 
-    return redirect("/")
+    except Exception as error:
+
+        print("ADD ROUTE ERROR:", error)
+
+        return "Unable to add medicine.", 500
 
 
 # ============================================================
@@ -293,11 +346,19 @@ def add():
 )
 def delete(medicine_id):
 
-    delete_medicine(
-        medicine_id
-    )
+    try:
 
-    return redirect("/")
+        delete_medicine(
+            medicine_id
+        )
+
+        return redirect("/")
+
+    except Exception as error:
+
+        print("DELETE ROUTE ERROR:", error)
+
+        return "Unable to delete medicine.", 500
 
 
 # ============================================================
@@ -331,7 +392,6 @@ def test_reminder():
         IST
     ).strftime("%H:%M")
 
-
     return jsonify(
         latest_reminder
     )
@@ -349,8 +409,106 @@ def take_medicine(medicine_id):
 
     global latest_reminder
 
+    print(
+        "Mark as Taken request received. ID:",
+        medicine_id
+    )
 
-    if medicine_id == -1:
+    try:
+
+        # ----------------------------------------------------
+        # TEST REMINDER
+        # ----------------------------------------------------
+
+        if medicine_id == -1:
+
+            latest_reminder = {
+                "active": False,
+                "id": 0,
+                "medicine": "",
+                "dosage": "",
+                "time": ""
+            }
+
+            print(
+                "Test reminder cleared successfully."
+            )
+
+            return jsonify({
+                "success": True,
+                "message": "Test reminder cleared"
+            })
+
+
+        # ----------------------------------------------------
+        # FIND MEDICINE
+        # ----------------------------------------------------
+
+        connection = get_connection()
+
+        try:
+
+            medicine = connection.execute(
+                """
+                SELECT
+                    id,
+                    name,
+                    dosage,
+                    time
+                FROM medicines
+                WHERE id = ?
+                """,
+                (medicine_id,)
+            ).fetchone()
+
+        finally:
+
+            connection.close()
+
+
+        # ----------------------------------------------------
+        # MEDICINE NOT FOUND
+        # ----------------------------------------------------
+
+        if medicine is None:
+
+            print(
+                "Medicine not found. ID:",
+                medicine_id
+            )
+
+            return jsonify({
+                "success": False,
+                "message": "Medicine not found"
+            }), 404
+
+
+        # ----------------------------------------------------
+        # SAVE HISTORY
+        # ----------------------------------------------------
+
+        history_saved = add_history(
+            medicine["name"],
+            medicine["dosage"],
+            medicine["time"]
+        )
+
+
+        if not history_saved:
+
+            print(
+                "History could not be saved."
+            )
+
+            return jsonify({
+                "success": False,
+                "message": "Could not save medicine history"
+            }), 500
+
+
+        # ----------------------------------------------------
+        # CLEAR ACTIVE REMINDER
+        # ----------------------------------------------------
 
         latest_reminder = {
             "active": False,
@@ -360,60 +518,30 @@ def take_medicine(medicine_id):
             "time": ""
         }
 
-        return jsonify(
-            {
-                "success": True
-            }
+
+        print(
+            "Medicine marked as taken successfully:",
+            medicine["name"]
         )
 
 
-    connection = get_connection()
+        return jsonify({
+            "success": True,
+            "message": "Medicine marked as taken successfully"
+        })
 
 
-    medicine = connection.execute(
-        """
-        SELECT *
-        FROM medicines
-        WHERE id = ?
-        """,
-        (medicine_id,)
-    ).fetchone()
+    except Exception as error:
 
-
-    connection.close()
-
-
-    if medicine is None:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Medicine not found"
-            }
+        print(
+            "TAKE MEDICINE ERROR:",
+            repr(error)
         )
 
-
-    add_history(
-        medicine["name"],
-        medicine["dosage"],
-        medicine["time"]
-    )
-
-
-    latest_reminder = {
-        "active": False,
-        "id": 0,
-        "medicine": "",
-        "dosage": "",
-        "time": ""
-    }
-
-
-    return jsonify(
-        {
-            "success": True
-        }
-    )
+        return jsonify({
+            "success": False,
+            "message": "Server error: " + str(error)
+        }), 500
 
 
 # ============================================================
@@ -422,9 +550,13 @@ def take_medicine(medicine_id):
 
 def check_reminders():
 
-    print("Medicine reminder scheduler started.")
+    print(
+        "Medicine reminder scheduler started."
+    )
 
-    print("Using Indian Standard Time (IST).")
+    print(
+        "Using Indian Standard Time (IST)."
+    )
 
 
     while True:
@@ -447,19 +579,11 @@ def check_reminders():
 
             for medicine in medicines:
 
-
                 if (
-
-                    medicine["time"]
-                    == current_time
-
+                    medicine["time"] == current_time
                     and
-
-                    medicine["last_notified"]
-                    != today
-
+                    medicine["last_notified"] != today
                 ):
-
 
                     latest_reminder["active"] = True
 
@@ -488,7 +612,7 @@ def check_reminders():
 
             print(
                 "Scheduler error:",
-                error
+                repr(error)
             )
 
 
@@ -500,11 +624,8 @@ def check_reminders():
 # ============================================================
 
 scheduler_thread = threading.Thread(
-
     target=check_reminders,
-
     daemon=True
-
 )
 
 scheduler_thread.start()
