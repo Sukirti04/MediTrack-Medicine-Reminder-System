@@ -1,71 +1,50 @@
 from flask import Flask, request, redirect, render_template, jsonify
 import sqlite3
-import threading
-import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
-# ============================================================
-# APPLICATION
-# ============================================================
 
 app = Flask(__name__)
 
 DATABASE = "medicines.db"
-
 IST = ZoneInfo("Asia/Kolkata")
 
 
-# ============================================================
-# REMINDER MEMORY
-# ============================================================
-
-latest_reminder = {
-    "active": False,
-    "id": 0,
-    "medicine": "",
-    "dosage": "",
-    "time": ""
-}
-
-
-# ============================================================
+# =========================================================
 # DATABASE CONNECTION
-# ============================================================
+# =========================================================
 
 def get_connection():
-
     connection = sqlite3.connect(
         DATABASE,
         timeout=10,
         check_same_thread=False
     )
-
     connection.row_factory = sqlite3.Row
-
     return connection
 
 
-# ============================================================
-# CREATE DATABASE TABLES
-# ============================================================
+# =========================================================
+# DATABASE SETUP + MIGRATION
+# =========================================================
 
 def create_tables():
-
     connection = get_connection()
 
     try:
-
+        # Medicines table
         connection.execute("""
             CREATE TABLE IF NOT EXISTS medicines (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 dosage TEXT NOT NULL,
                 time TEXT NOT NULL,
+                duration_days INTEGER NOT NULL DEFAULT 1,
+                start_date TEXT NOT NULL,
                 last_notified TEXT DEFAULT ''
             )
         """)
 
+        # History table
         connection.execute("""
             CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,63 +56,125 @@ def create_tables():
             )
         """)
 
+        # -------------------------------------------------
+        # DATABASE MIGRATION
+        # This allows an older medicines.db to continue
+        # working after adding duration_days/start_date.
+        # -------------------------------------------------
+
+        columns = connection.execute(
+            "PRAGMA table_info(medicines)"
+        ).fetchall()
+
+        column_names = [column["name"] for column in columns]
+
+        # Add duration_days if it doesn't exist
+        if "duration_days" not in column_names:
+            connection.execute("""
+                ALTER TABLE medicines
+                ADD COLUMN duration_days INTEGER NOT NULL DEFAULT 36500
+            """)
+
+        # Add start_date if it doesn't exist
+        if "start_date" not in column_names:
+            today = datetime.now(IST).strftime("%Y-%m-%d")
+
+            connection.execute(
+                """
+                ALTER TABLE medicines
+                ADD COLUMN start_date TEXT
+                """
+            )
+
+            connection.execute(
+                """
+                UPDATE medicines
+                SET start_date = ?
+                WHERE start_date IS NULL OR start_date = ''
+                """,
+                (today,)
+            )
+
+        # Make sure old records have usable values
+        connection.execute("""
+            UPDATE medicines
+            SET duration_days = 36500
+            WHERE duration_days IS NULL OR duration_days <= 0
+        """)
+
+        connection.execute("""
+            UPDATE medicines
+            SET start_date = ?
+            WHERE start_date IS NULL OR start_date = ''
+        """, (
+            datetime.now(IST).strftime("%Y-%m-%d"),
+        ))
+
         connection.commit()
 
-        print("Database tables checked successfully.")
-
     except Exception as error:
-
-        print("Database table error:", error)
+        connection.rollback()
+        print("DATABASE SETUP ERROR:", error)
 
     finally:
-
         connection.close()
 
 
 create_tables()
 
 
-# ============================================================
+# =========================================================
 # MEDICINE FUNCTIONS
-# ============================================================
+# =========================================================
 
-def add_medicine(name, dosage, medicine_time):
-
+def add_medicine(
+    name,
+    dosage,
+    medicine_time,
+    duration_days,
+    start_date
+):
     connection = get_connection()
 
     try:
-
         connection.execute(
             """
             INSERT INTO medicines
-            (name, dosage, time)
-            VALUES (?, ?, ?)
+            (
+                name,
+                dosage,
+                time,
+                duration_days,
+                start_date,
+                last_notified
+            )
+            VALUES (?, ?, ?, ?, ?, '')
             """,
             (
                 name,
                 dosage,
-                medicine_time
+                medicine_time,
+                duration_days,
+                start_date
             )
         )
 
         connection.commit()
+        return True
 
     except Exception as error:
-
-        print("Add medicine error:", error)
-        raise
+        connection.rollback()
+        print("ADD MEDICINE ERROR:", error)
+        return False
 
     finally:
-
         connection.close()
 
 
 def get_medicines():
-
     connection = get_connection()
 
     try:
-
         medicines = connection.execute(
             """
             SELECT *
@@ -145,16 +186,13 @@ def get_medicines():
         return medicines
 
     finally:
-
         connection.close()
 
 
 def delete_medicine(medicine_id):
-
     connection = get_connection()
 
     try:
-
         connection.execute(
             """
             DELETE FROM medicines
@@ -164,56 +202,25 @@ def delete_medicine(medicine_id):
         )
 
         connection.commit()
+        return True
 
     except Exception as error:
-
-        print("Delete medicine error:", error)
-        raise
+        connection.rollback()
+        print("DELETE MEDICINE ERROR:", error)
+        return False
 
     finally:
-
         connection.close()
 
 
-def update_last_notified(medicine_id, date):
-
-    connection = get_connection()
-
-    try:
-
-        connection.execute(
-            """
-            UPDATE medicines
-            SET last_notified = ?
-            WHERE id = ?
-            """,
-            (
-                date,
-                medicine_id
-            )
-        )
-
-        connection.commit()
-
-    except Exception as error:
-
-        print("Update notification error:", error)
-
-    finally:
-
-        connection.close()
-
-
-# ============================================================
-# HISTORY
-# ============================================================
+# =========================================================
+# HISTORY FUNCTIONS
+# =========================================================
 
 def get_history():
-
     connection = get_connection()
 
     try:
-
         history = connection.execute(
             """
             SELECT *
@@ -225,7 +232,6 @@ def get_history():
         return history
 
     finally:
-
         connection.close()
 
 
@@ -234,13 +240,11 @@ def add_history(
     dosage,
     scheduled_time
 ):
-
     now = datetime.now(IST)
 
     connection = get_connection()
 
     try:
-
         connection.execute(
             """
             INSERT INTO history
@@ -263,143 +267,122 @@ def add_history(
         )
 
         connection.commit()
-
-        print(
-            "History saved:",
-            medicine_name,
-            now.strftime("%Y-%m-%d %H:%M")
-        )
-
         return True
 
     except Exception as error:
-
-        print("HISTORY SAVE ERROR:", error)
-
         connection.rollback()
-
+        print("HISTORY SAVE ERROR:", error)
         return False
 
     finally:
-
         connection.close()
 
 
-# ============================================================
-# HOME PAGE
-# ============================================================
+# =========================================================
+# HOME
+# =========================================================
 
 @app.route("/")
 def home():
 
     medicines = get_medicines()
-
     history = get_history()
 
     return render_template(
         "index.html",
         medicines=medicines,
-        history=history,
-        reminder=latest_reminder
+        history=history
     )
 
 
-# ============================================================
+# =========================================================
 # ADD MEDICINE
-# ============================================================
+# =========================================================
 
-@app.route(
-    "/add",
-    methods=["POST"]
-)
+@app.route("/add", methods=["POST"])
 def add():
 
     try:
+        name = request.form.get("name", "").strip()
+        dosage = request.form.get("dosage", "").strip()
+        medicine_time = request.form.get("time", "").strip()
 
-        name = request.form["name"]
+        duration_text = request.form.get(
+            "duration_days",
+            "1"
+        ).strip()
 
-        dosage = request.form["dosage"]
+        if not name or not dosage or not medicine_time:
+            return redirect("/")
 
-        medicine_time = request.form["time"]
+        duration_days = int(duration_text)
 
-        add_medicine(
+        if duration_days < 1:
+            duration_days = 1
+
+        # Maximum is intentionally generous.
+        # User can enter years if required.
+        if duration_days > 36500:
+            duration_days = 36500
+
+        start_date = datetime.now(IST).strftime(
+            "%Y-%m-%d"
+        )
+
+        success = add_medicine(
             name,
             dosage,
-            medicine_time
+            medicine_time,
+            duration_days,
+            start_date
         )
+
+        if not success:
+            return "Unable to add medicine", 500
 
         return redirect("/")
 
+    except ValueError:
+        return "Invalid number of reminder days", 400
+
     except Exception as error:
-
         print("ADD ROUTE ERROR:", error)
+        return "Unable to add medicine", 500
 
-        return "Unable to add medicine.", 500
 
-
-# ============================================================
+# =========================================================
 # DELETE MEDICINE
-# ============================================================
+# =========================================================
 
-@app.route(
-    "/delete/<int:medicine_id>"
-)
+@app.route("/delete/<int:medicine_id>")
 def delete(medicine_id):
 
-    try:
+    delete_medicine(medicine_id)
 
-        delete_medicine(
-            medicine_id
-        )
-
-        return redirect("/")
-
-    except Exception as error:
-
-        print("DELETE ROUTE ERROR:", error)
-
-        return "Unable to delete medicine.", 500
+    return redirect("/")
 
 
-# ============================================================
-# REMINDER API
-# ============================================================
-
-@app.route("/api/reminder")
-def reminder_api():
-
-    return jsonify(
-        latest_reminder
-    )
-
-
-# ============================================================
+# =========================================================
 # TEST REMINDER
-# ============================================================
+# =========================================================
 
 @app.route("/api/test")
 def test_reminder():
 
-    latest_reminder["active"] = True
+    now = datetime.now(IST)
 
-    latest_reminder["id"] = -1
-
-    latest_reminder["medicine"] = "Test Medicine"
-
-    latest_reminder["dosage"] = "1 tablet"
-
-    latest_reminder["time"] = datetime.now(
-        IST
-    ).strftime("%H:%M")
-
-    return jsonify(
-        latest_reminder
-    )
+    return jsonify({
+        "active": True,
+        "id": -1,
+        "medicine": "Test Medicine",
+        "dosage": "1 tablet",
+        "time": now.strftime("%H:%M")
+    })
 
 
-# ============================================================
+# =========================================================
 # MARK MEDICINE AS TAKEN
-# ============================================================
+# =========================================================
 
 @app.route(
     "/api/take/<int:medicine_id>",
@@ -407,233 +390,74 @@ def test_reminder():
 )
 def take_medicine(medicine_id):
 
-    global latest_reminder
+    # -----------------------------------------------------
+    # TEST REMINDER
+    # -----------------------------------------------------
 
-    print(
-        "Mark as Taken request received. ID:",
-        medicine_id
-    )
-
-    try:
-
-        # ----------------------------------------------------
-        # TEST REMINDER
-        # ----------------------------------------------------
-
-        if medicine_id == -1:
-
-            latest_reminder = {
-                "active": False,
-                "id": 0,
-                "medicine": "",
-                "dosage": "",
-                "time": ""
-            }
-
-            print(
-                "Test reminder cleared successfully."
-            )
-
-            return jsonify({
-                "success": True,
-                "message": "Test reminder cleared"
-            })
-
-
-        # ----------------------------------------------------
-        # FIND MEDICINE
-        # ----------------------------------------------------
-
-        connection = get_connection()
-
-        try:
-
-            medicine = connection.execute(
-                """
-                SELECT
-                    id,
-                    name,
-                    dosage,
-                    time
-                FROM medicines
-                WHERE id = ?
-                """,
-                (medicine_id,)
-            ).fetchone()
-
-        finally:
-
-            connection.close()
-
-
-        # ----------------------------------------------------
-        # MEDICINE NOT FOUND
-        # ----------------------------------------------------
-
-        if medicine is None:
-
-            print(
-                "Medicine not found. ID:",
-                medicine_id
-            )
-
-            return jsonify({
-                "success": False,
-                "message": "Medicine not found"
-            }), 404
-
-
-        # ----------------------------------------------------
-        # SAVE HISTORY
-        # ----------------------------------------------------
-
-        history_saved = add_history(
-            medicine["name"],
-            medicine["dosage"],
-            medicine["time"]
-        )
-
-
-        if not history_saved:
-
-            print(
-                "History could not be saved."
-            )
-
-            return jsonify({
-                "success": False,
-                "message": "Could not save medicine history"
-            }), 500
-
-
-        # ----------------------------------------------------
-        # CLEAR ACTIVE REMINDER
-        # ----------------------------------------------------
-
-        latest_reminder = {
-            "active": False,
-            "id": 0,
-            "medicine": "",
-            "dosage": "",
-            "time": ""
-        }
-
-
-        print(
-            "Medicine marked as taken successfully:",
-            medicine["name"]
-        )
-
+    if medicine_id == -1:
 
         return jsonify({
             "success": True,
-            "message": "Medicine marked as taken successfully"
+            "message": "Test reminder marked as taken"
         })
 
 
-    except Exception as error:
+    # -----------------------------------------------------
+    # FIND MEDICINE
+    # -----------------------------------------------------
 
-        print(
-            "TAKE MEDICINE ERROR:",
-            repr(error)
-        )
+    connection = get_connection()
+
+    try:
+        medicine = connection.execute(
+            """
+            SELECT *
+            FROM medicines
+            WHERE id = ?
+            """,
+            (medicine_id,)
+        ).fetchone()
+
+    finally:
+        connection.close()
+
+
+    if medicine is None:
 
         return jsonify({
             "success": False,
-            "message": "Server error: " + str(error)
+            "message": "Medicine not found"
+        }), 404
+
+
+    # -----------------------------------------------------
+    # SAVE TO HISTORY
+    # -----------------------------------------------------
+
+    saved = add_history(
+        medicine["name"],
+        medicine["dosage"],
+        medicine["time"]
+    )
+
+
+    if not saved:
+
+        return jsonify({
+            "success": False,
+            "message": "Could not save medicine history"
         }), 500
 
 
-# ============================================================
-# REMINDER SCHEDULER
-# ============================================================
-
-def check_reminders():
-
-    print(
-        "Medicine reminder scheduler started."
-    )
-
-    print(
-        "Using Indian Standard Time (IST)."
-    )
+    return jsonify({
+        "success": True,
+        "message": "Medicine marked as taken"
+    })
 
 
-    while True:
-
-        try:
-
-            now = datetime.now(IST)
-
-            current_time = now.strftime(
-                "%H:%M"
-            )
-
-            today = now.strftime(
-                "%Y-%m-%d"
-            )
-
-
-            medicines = get_medicines()
-
-
-            for medicine in medicines:
-
-                if (
-                    medicine["time"] == current_time
-                    and
-                    medicine["last_notified"] != today
-                ):
-
-                    latest_reminder["active"] = True
-
-                    latest_reminder["id"] = medicine["id"]
-
-                    latest_reminder["medicine"] = medicine["name"]
-
-                    latest_reminder["dosage"] = medicine["dosage"]
-
-                    latest_reminder["time"] = current_time
-
-
-                    print(
-                        "🔔 Reminder:",
-                        medicine["name"]
-                    )
-
-
-                    update_last_notified(
-                        medicine["id"],
-                        today
-                    )
-
-
-        except Exception as error:
-
-            print(
-                "Scheduler error:",
-                repr(error)
-            )
-
-
-        time.sleep(20)
-
-
-# ============================================================
-# START SCHEDULER
-# ============================================================
-
-scheduler_thread = threading.Thread(
-    target=check_reminders,
-    daemon=True
-)
-
-scheduler_thread.start()
-
-
-# ============================================================
+# =========================================================
 # RUN APPLICATION
-# ============================================================
+# =========================================================
 
 if __name__ == "__main__":
 
