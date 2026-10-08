@@ -5,33 +5,21 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>MediTrack - Medicine Reminder</title>
+    <title>Medicine Reminder</title>
 
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet">
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
         :root {
-
             --sapphire: #245A9C;
             --sapphire-dark: #163F70;
             --sapphire-light: #E8F1FA;
@@ -41,844 +29,320 @@
             --muted: #718096;
             --border: #DCE7F2;
             --soft-blue: #F0F6FC;
-            --success: #2E8B57;
-            --danger: #D9534F;
-
         }
 
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-
+            margin: 0;
             font-family: "Poppins", sans-serif;
-
             background:
                 radial-gradient(
                     circle at top left,
-                    #E8F1FA 0,
-                    transparent 30%
+                    #e7f1fb,
+                    transparent 35%
                 ),
-
                 radial-gradient(
                     circle at bottom right,
-                    #EAF4FF 0,
-                    transparent 30%
+                    #eaf3fb,
+                    transparent 35%
                 ),
-
                 var(--background);
-
             color: var(--text);
-
             min-height: 100vh;
-
-            padding: 25px 15px 50px;
-
         }
-
 
         .container {
-
+            width: 92%;
             max-width: 1100px;
-
             margin: auto;
-
+            padding: 30px 0 50px;
         }
-
-
-        .circle {
-
-            position: fixed;
-
-            border-radius: 50%;
-
-            z-index: -1;
-
-            opacity: 0.5;
-
-        }
-
-
-        .circle-one {
-
-            width: 180px;
-            height: 180px;
-
-            background: #DCEBFA;
-
-            top: -70px;
-            left: -70px;
-
-        }
-
-
-        .circle-two {
-
-            width: 230px;
-            height: 230px;
-
-            background: #E4F0FC;
-
-            bottom: -100px;
-            right: -80px;
-
-        }
-
-
-        /* HEADER */
 
         header {
-
-            background: var(--card);
-
-            border: 1px solid var(--border);
-
-            border-radius: 24px;
-
-            padding: 25px;
-
-            margin-bottom: 22px;
-
-            box-shadow:
-                0 10px 30px
-                rgba(36, 90, 156, 0.08);
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 20px;
-
+            text-align: center;
+            margin-bottom: 25px;
         }
 
-
-        .brand {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-
-        }
-
-
-        .brand-icon {
-
-            width: 62px;
-            height: 62px;
-
-            border-radius: 18px;
-
-            background: var(--sapphire-light);
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            font-size: 32px;
-
-        }
-
-
-        .brand h1 {
-
+        header h1 {
             color: var(--sapphire-dark);
-
-            font-size: 28px;
-
-            margin-bottom: 3px;
-
+            margin: 0;
+            font-size: 34px;
         }
 
-
-        .brand p {
-
+        header p {
             color: var(--muted);
-
-            font-size: 14px;
-
+            margin-top: 8px;
         }
-
 
         .clock {
-
-            background: var(--soft-blue);
-
-            border: 1px solid var(--border);
-
-            padding: 12px 18px;
-
-            border-radius: 14px;
-
-            text-align: center;
-
-        }
-
-
-        .clock-title {
-
-            font-size: 11px;
-
-            color: var(--muted);
-
-        }
-
-
-        #clock {
-
-            font-size: 18px;
-
-            font-weight: 600;
-
+            display: inline-block;
+            margin-top: 8px;
+            background: var(--sapphire-light);
             color: var(--sapphire-dark);
-
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
         }
-
-
-        /* GRID */
 
         .grid {
-
             display: grid;
-
-            grid-template-columns: 1fr 1.4fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 22px;
-
         }
-
 
         .card {
-
             background: var(--card);
-
             border: 1px solid var(--border);
-
-            border-radius: 22px;
-
-            padding: 24px;
-
-            box-shadow:
-                0 8px 25px
-                rgba(36, 90, 156, 0.07);
-
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(36, 90, 156, 0.08);
         }
 
-
-        .card-title {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
+        .card h2 {
+            margin-top: 0;
             color: var(--sapphire-dark);
-
-            font-size: 20px;
-
-            font-weight: 600;
-
-            margin-bottom: 18px;
-
+            font-size: 21px;
         }
 
-
-        .card-title span {
-
-            font-size: 23px;
-
+        .emoji-title {
+            margin-right: 7px;
         }
 
-
-        /* FORM */
-
-        .form-group {
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .form-group label {
-
+        label {
             display: block;
-
-            font-size: 13px;
-
-            font-weight: 500;
-
-            margin-bottom: 7px;
-
-            color: var(--text);
-
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
         }
-
 
         input {
-
             width: 100%;
-
             padding: 12px 14px;
-
             border: 1px solid var(--border);
-
-            border-radius: 12px;
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-            color: var(--text);
-
-            background: #fff;
-
+            border-radius: 10px;
             outline: none;
-
-            transition: 0.2s;
-
+            font-family: inherit;
+            color: var(--text);
+            background: white;
         }
-
 
         input:focus {
-
             border-color: var(--sapphire);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(36, 90, 156, 0.10);
-
+            box-shadow: 0 0 0 3px rgba(36, 90, 156, 0.10);
         }
 
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 16px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
 
         .primary-btn {
-
-            width: 100%;
-
-            border: none;
-
-            border-radius: 12px;
-
-            padding: 13px;
-
             background: var(--sapphire);
-
             color: white;
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-
+            width: 100%;
+            margin-top: 20px;
         }
-
 
         .primary-btn:hover {
-
             background: var(--sapphire-dark);
-
-            transform: translateY(-1px);
-
         }
 
-
-        .secondary-btn {
-
-            width: 100%;
-
-            margin-top: 10px;
-
-            border: 1px solid var(--sapphire);
-
-            border-radius: 12px;
-
-            padding: 12px;
-
-            background: white;
-
-            color: var(--sapphire);
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
         }
 
-
-        .secondary-btn:hover {
-
-            background: var(--sapphire-light);
-
+        .test-buttons button {
+            flex: 1;
         }
 
+        .test-btn {
+            background: var(--soft-blue);
+            color: var(--sapphire-dark);
+            border: 1px solid var(--border);
+        }
 
-        /* MEDICINE LIST */
+        .notification-btn {
+            background: var(--sapphire);
+            color: white;
+        }
+
+        .notification-btn:hover {
+            background: var(--sapphire-dark);
+        }
 
         .medicine-list {
-
             display: flex;
-
             flex-direction: column;
-
             gap: 12px;
-
         }
-
 
         .medicine-item {
-
-            border: 1px solid var(--border);
-
-            border-radius: 15px;
-
-            padding: 15px;
-
             background: var(--soft-blue);
-
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 15px;
             display: flex;
-
-            align-items: center;
-
             justify-content: space-between;
-
-            gap: 15px;
-
-        }
-
-
-        .medicine-info {
-
-            display: flex;
-
             align-items: center;
-
-            gap: 13px;
-
-            min-width: 0;
-
+            gap: 10px;
         }
-
-
-        .medicine-icon {
-
-            min-width: 44px;
-
-            width: 44px;
-
-            height: 44px;
-
-            border-radius: 13px;
-
-            background: white;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            font-size: 22px;
-
-        }
-
-
-        .medicine-details {
-
-            min-width: 0;
-
-        }
-
 
         .medicine-name {
-
-            font-weight: 600;
-
+            font-weight: 700;
             color: var(--sapphire-dark);
-
-            word-break: break-word;
-
         }
 
-
-        .medicine-dosage {
-
+        .medicine-info {
             color: var(--muted);
-
-            font-size: 12px;
-
-            margin-top: 2px;
-
-        }
-
-
-        .medicine-time {
-
-            font-weight: 600;
-
-            color: var(--sapphire);
-
-            font-size: 14px;
-
+            font-size: 13px;
             margin-top: 3px;
-
         }
-
 
         .delete-btn {
-
-            text-decoration: none;
-
-            background: #FFF0F0;
-
-            color: var(--danger);
-
-            border: 1px solid #F5D1D1;
-
-            border-radius: 9px;
-
-            padding: 8px 11px;
-
-            font-size: 12px;
-
-            font-weight: 600;
-
-            white-space: nowrap;
-
+            background: #fff0f0;
+            color: #c0392b;
+            border: 1px solid #f3cccc;
         }
 
-
-        .delete-btn:hover {
-
-            background: #FFE4E4;
-
+        .reminder-area {
+            margin-top: 20px;
         }
-
-
-        /* EMPTY */
-
-        .empty {
-
-            text-align: center;
-
-            padding: 25px 10px;
-
-            color: var(--muted);
-
-        }
-
-
-        .empty-icon {
-
-            font-size: 35px;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        /* REMINDER */
-
-        #reminderArea {
-
-            margin-top: 22px;
-
-        }
-
 
         .reminder-card {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #E8F1FA,
-                    #F8FBFF
-                );
-
-            border: 1px solid #BFD6ED;
-
-            border-radius: 20px;
-
-            padding: 22px;
-
-            box-shadow:
-                0 8px 25px
-                rgba(36, 90, 156, 0.08);
-
+            background: var(--sapphire-light);
+            border: 2px solid var(--sapphire);
+            border-radius: 16px;
+            padding: 18px;
+            animation: pulse 1.2s infinite alternate;
         }
 
+        @keyframes pulse {
+            from {
+                box-shadow: 0 0 0 rgba(36, 90, 156, 0.1);
+            }
+
+            to {
+                box-shadow: 0 0 18px rgba(36, 90, 156, 0.20);
+            }
+        }
 
         .reminder-title {
-
             color: var(--sapphire-dark);
-
             font-weight: 700;
-
             font-size: 18px;
-
-            margin-bottom: 8px;
-
         }
-
-
-        .reminder-medicine {
-
-            font-size: 22px;
-
-            font-weight: 700;
-
-            color: var(--sapphire);
-
-            margin-bottom: 4px;
-
-        }
-
 
         .reminder-details {
-
-            color: var(--muted);
-
-            font-size: 14px;
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .take-btn {
-
-            border: none;
-
-            background: var(--sapphire);
-
-            color: white;
-
-            padding: 11px 18px;
-
-            border-radius: 11px;
-
-            font-family: inherit;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-        }
-
-
-        .take-btn:hover {
-
-            background: var(--sapphire-dark);
-
-        }
-
-
-        .take-btn:disabled {
-
-            opacity: 0.6;
-
-            cursor: not-allowed;
-
-        }
-
-
-        /* MESSAGE */
-
-        #message {
-
-            display: none;
-
-            margin-top: 12px;
-
-            padding: 10px 14px;
-
-            border-radius: 10px;
-
-            background: #EAF7EF;
-
-            color: var(--success);
-
-            font-size: 13px;
-
-            font-weight: 500;
-
-        }
-
-
-        /* HISTORY */
-
-        .history-card {
-
-            margin-top: 22px;
-
-        }
-
-
-        .history-list {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 10px;
-
-            max-height: 350px;
-
-            overflow-y: auto;
-
-        }
-
-
-        .history-item {
-
-            border: 1px solid var(--border);
-
-            border-radius: 13px;
-
-            padding: 13px 15px;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 15px;
-
-            background: #fff;
-
-        }
-
-
-        .history-name {
-
-            font-weight: 600;
-
+            margin-top: 7px;
             color: var(--text);
+        }
 
+        .taken-btn {
+            background: var(--sapphire);
+            color: white;
+            margin-top: 14px;
+            width: 100%;
+        }
+
+        .taken-btn:hover {
+            background: var(--sapphire-dark);
+        }
+
+        .success-message {
+            margin-top: 15px;
+            background: #edf8f1;
+            color: #217a45;
+            border: 1px solid #c8ead4;
+            padding: 12px 14px;
+            border-radius: 10px;
             font-size: 14px;
-
-        }
-
-
-        .history-details {
-
-            color: var(--muted);
-
-            font-size: 12px;
-
-            margin-top: 3px;
-
-        }
-
-
-        .history-time {
-
-            text-align: right;
-
-            color: var(--success);
-
-            font-size: 12px;
-
             font-weight: 600;
-
-            white-space: nowrap;
-
         }
 
-
-        footer {
-
-            text-align: center;
-
+        .empty {
             color: var(--muted);
-
-            font-size: 12px;
-
-            margin-top: 25px;
-
+            text-align: center;
+            padding: 20px 0;
         }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
 
-        @media (max-width: 800px) {
+        th,
+        td {
+            padding: 11px 8px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            color: var(--sapphire-dark);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .duration-help {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .notification-status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 750px) {
 
             .grid {
-
                 grid-template-columns: 1fr;
-
             }
 
+            header h1 {
+                font-size: 27px;
+            }
 
-            header {
+            .container {
+                width: 94%;
+                padding-top: 20px;
+            }
 
+            .test-buttons {
                 flex-direction: column;
-
-                align-items: flex-start;
-
             }
-
-
-            .clock {
-
-                width: 100%;
-
-            }
-
-        }
-
-
-        @media (max-width: 500px) {
-
-            body {
-
-                padding: 15px 10px 35px;
-
-            }
-
-
-            .card,
-            header {
-
-                padding: 18px;
-
-                border-radius: 18px;
-
-            }
-
-
-            .brand h1 {
-
-                font-size: 23px;
-
-            }
-
 
             .medicine-item {
-
                 align-items: flex-start;
-
             }
 
-
-            .history-item {
-
-                align-items: flex-start;
-
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
-
         }
 
     </style>
@@ -888,243 +352,229 @@
 
 <body>
 
+<div class="container">
 
-    <div class="circle circle-one"></div>
+    <header>
 
-    <div class="circle circle-two"></div>
+        <h1>💊 Medicine Reminder</h1>
 
+        <p>
+            Never miss your medicine again 🌿
+        </p>
 
-    <div class="container">
+        <div
+            class="clock"
+            id="clock"
+        >
+            Loading IST...
+        </div>
 
-
-        <!-- HEADER -->
-
-        <header>
-
-            <div class="brand">
-
-                <div class="brand-icon">
-                    💊
-                </div>
-
-                <div>
-
-                    <h1>
-                        MediTrack
-                    </h1>
-
-                    <p>
-                        Medicine Reminder System
-                    </p>
-
-                </div>
-
-            </div>
+    </header>
 
 
-            <div class="clock">
-
-                <div class="clock-title">
-                    Indian Standard Time
-                </div>
-
-                <div id="clock">
-                    --:--:--
-                </div>
-
-            </div>
-
-        </header>
+    <div class="grid">
 
 
+        <!-- ==========================================
+             ADD MEDICINE
+        =========================================== -->
 
-        <!-- MAIN GRID -->
+        <div class="card">
 
-        <div class="grid">
+            <h2>
+                <span class="emoji-title">💊</span>
+                Add Medicine
+            </h2>
 
+            <form
+                action="/add"
+                method="POST"
+            >
 
-            <!-- ADD MEDICINE -->
+                <label for="name">
+                    Medicine Name
+                </label>
 
-            <div class="card">
-
-                <div class="card-title">
-
-                    <span>➕</span>
-
-                    Add Medicine
-
-                </div>
-
-
-                <form
-                    action="/add"
-                    method="POST"
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="e.g. PCM"
+                    required
                 >
 
-                    <div class="form-group">
 
-                        <label for="name">
-                            Medicine Name
-                        </label>
+                <label for="dosage">
+                    Dosage
+                </label>
 
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="e.g. Paracetamol"
-                            required
-                        >
-
-                    </div>
+                <input
+                    type="text"
+                    id="dosage"
+                    name="dosage"
+                    placeholder="e.g. 1 tablet"
+                    required
+                >
 
 
-                    <div class="form-group">
+                <label for="time">
+                    Reminder Time
+                </label>
 
-                        <label for="dosage">
-                            Dosage
-                        </label>
-
-                        <input
-                            type="text"
-                            id="dosage"
-                            name="dosage"
-                            placeholder="e.g. 1 tablet"
-                            required
-                        >
-
-                    </div>
+                <input
+                    type="time"
+                    id="time"
+                    name="time"
+                    required
+                >
 
 
-                    <div class="form-group">
+                <label for="duration_days">
+                    Reminder for how many days?
+                </label>
 
-                        <label for="time">
-                            Reminder Time
-                        </label>
+                <input
+                    type="number"
+                    id="duration_days"
+                    name="duration_days"
+                    min="1"
+                    max="36500"
+                    value="1"
+                    required
+                >
 
-                        <input
-                            type="time"
-                            id="time"
-                            name="time"
-                            required
-                        >
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="primary-btn"
-                    >
-
-                        💾 Save Medicine
-
-                    </button>
-
-                </form>
+                <div class="duration-help">
+                    Enter the number of days you want this medicine
+                    reminder to continue.
+                    Example: 7 = reminder for 7 days.
+                </div>
 
 
                 <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    ➕ Add Medicine
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ==========================================
+             TEST / REMINDER
+        =========================================== -->
+
+        <div class="card">
+
+            <h2>
+                <span class="emoji-title">🔔</span>
+                Notification & Reminder Test
+            </h2>
+
+            <p style="color: var(--muted); font-size: 14px;">
+                Test your device notification first, then test
+                the medicine reminder.
+            </p>
+
+
+            <div class="test-buttons">
+
+                <button
                     type="button"
-                    class="secondary-btn"
+                    class="notification-btn"
+                    onclick="testNotification()"
+                >
+                    🔔 Test Notification
+                </button>
+
+                <button
+                    type="button"
+                    class="test-btn"
                     onclick="testReminder()"
                 >
-
-                    🔔 Test Reminder
-
+                    🧪 Test Reminder
                 </button>
 
             </div>
 
+            <div
+                id="notificationStatus"
+                class="notification-status"
+            ></div>
 
 
-            <!-- MEDICINES -->
+            <div
+                id="reminderArea"
+                class="reminder-area"
+            ></div>
 
-            <div class="card">
+        </div>
 
-                <div class="card-title">
 
-                    <span>💊</span>
+        <!-- ==========================================
+             REGISTERED MEDICINES
+        =========================================== -->
 
-                    My Medicines
+        <div class="card full-width">
 
-                </div>
+            <h2>
+                <span class="emoji-title">📋</span>
+                Registered Medicines
+            </h2>
 
+            <div class="medicine-list">
 
                 {% if medicines %}
 
-                    <div class="medicine-list">
+                    {% for medicine in medicines %}
 
-                        {% for medicine in medicines %}
+                    <div class="medicine-item">
 
-                            <div class="medicine-item">
+                        <div>
 
-                                <div class="medicine-info">
-
-                                    <div class="medicine-icon">
-                                        💊
-                                    </div>
-
-
-                                    <div class="medicine-details">
-
-                                        <div class="medicine-name">
-
-                                            {{ medicine["name"] }}
-
-                                        </div>
-
-
-                                        <div class="medicine-dosage">
-
-                                            {{ medicine["dosage"] }}
-
-                                        </div>
-
-
-                                        <div class="medicine-time">
-
-                                            ⏰
-                                            {{ medicine["time"] }}
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-                                <a
-                                    href="/delete/{{ medicine['id'] }}"
-                                    class="delete-btn"
-                                    onclick="return confirm('Delete this medicine?');"
-                                >
-
-                                    Delete
-
-                                </a>
-
+                            <div class="medicine-name">
+                                💊 {{ medicine["name"] }}
                             </div>
 
-                        {% endfor %}
+                            <div class="medicine-info">
+                                {{ medicine["dosage"] }}
+                                &nbsp; • &nbsp;
+                                ⏰ {{ medicine["time"] }}
+                            </div>
+
+                            <div class="medicine-info">
+                                📅 Reminder for
+                                {{ medicine["duration_days"] }}
+                                day{% if medicine["duration_days"] != 1 %}s{% endif %}
+                                from
+                                {{ medicine["start_date"] }}
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="/delete/{{ medicine['id'] }}"
+                            onclick="return confirm('Delete this medicine?')"
+                        >
+                            <button
+                                type="button"
+                                class="delete-btn"
+                            >
+                                🗑 Delete
+                            </button>
+                        </a>
 
                     </div>
+
+                    {% endfor %}
 
                 {% else %}
 
                     <div class="empty">
-
-                        <div class="empty-icon">
-                            🌿
-                        </div>
-
-                        <p>
-                            No medicines added yet.
-                        </p>
-
-                        <p>
-                            Add your first medicine using the form.
-                        </p>
-
+                        No medicines registered yet.
                     </div>
 
                 {% endif %}
@@ -1134,1091 +584,974 @@
         </div>
 
 
+        <!-- ==========================================
+             HISTORY
+        =========================================== -->
 
-        <!-- REMINDER -->
+        <div class="card full-width">
 
-        <div id="reminderArea">
-
-            {% if reminder and reminder.active %}
-
-                <div class="reminder-card">
-
-                    <div class="reminder-title">
-
-                        🔔 Medicine Reminder
-
-                    </div>
-
-
-                    <div class="reminder-medicine">
-
-                        {{ reminder.medicine }}
-
-                    </div>
-
-
-                    <div class="reminder-details">
-
-                        Dosage:
-                        {{ reminder.dosage }}
-
-                        &nbsp; | &nbsp;
-
-                        Time:
-                        {{ reminder.time }}
-
-                    </div>
-
-
-                    <button
-                        class="take-btn"
-                        onclick="takeMedicine({{ reminder.id }}, this)"
-                    >
-
-                        ✓ Mark as Taken
-
-                    </button>
-
-                </div>
-
-            {% endif %}
-
-        </div>
-
-
-        <div id="message"></div>
-
-
-
-        <!-- HISTORY -->
-
-        <div class="card history-card">
-
-            <div class="card-title">
-
-                <span>📋</span>
-
+            <h2>
+                <span class="emoji-title">📜</span>
                 Medicine History
-
-            </div>
-
+            </h2>
 
             {% if history %}
 
-                <div class="history-list">
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Dosage</th>
+                        <th>Scheduled</th>
+                        <th>Taken</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
 
                     {% for item in history %}
 
-                        <div class="history-item">
+                    <tr>
 
-                            <div>
+                        <td>
+                            {{ item["medicine_name"] }}
+                        </td>
 
-                                <div class="history-name">
+                        <td>
+                            {{ item["dosage"] }}
+                        </td>
 
-                                    {{ item["medicine_name"] }}
+                        <td>
+                            {{ item["scheduled_time"] }}
+                        </td>
 
-                                </div>
+                        <td>
+                            {{ item["taken_time"] }}
+                        </td>
 
+                        <td>
+                            {{ item["date"] }}
+                        </td>
 
-                                <div class="history-details">
-
-                                    {{ item["dosage"] }}
-
-                                    &nbsp; • &nbsp;
-
-                                    Scheduled:
-                                    {{ item["scheduled_time"] }}
-
-                                    &nbsp; • &nbsp;
-
-                                    {{ item["date"] }}
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="history-time">
-
-                                ✓ Taken
-
-                                <br>
-
-                                {{ item["taken_time"] }}
-
-                            </div>
-
-                        </div>
+                    </tr>
 
                     {% endfor %}
 
-                </div>
+                </tbody>
+
+            </table>
 
             {% else %}
 
-                <div class="empty">
-
-                    <div class="empty-icon">
-                        📋
-                    </div>
-
-                    <p>
-                        No medicine history yet.
-                    </p>
-
-                </div>
+            <div class="empty">
+                No medicine has been marked as taken yet.
+            </div>
 
             {% endif %}
 
         </div>
 
-
-        <footer>
-
-            🌿 MediTrack
-            &nbsp;•&nbsp;
-            Medicine Reminder System
-
-        </footer>
-
-
     </div>
 
+</div>
 
 
-    <script>
+<script>
 
 
-        /* =====================================================
-           MEDICINE DATA FROM FLASK
-           ===================================================== */
+// ========================================================
+// MEDICINE DATA FROM FLASK
+// ========================================================
 
-        const medicines = [
+const medicines = [
 
-            {% for medicine in medicines %}
+    {% for medicine in medicines %}
 
+    {
+        id: {{ medicine["id"] }},
+        name: {{ medicine["name"]|tojson }},
+        dosage: {{ medicine["dosage"]|tojson }},
+        time: {{ medicine["time"]|tojson }},
+        duration_days: {{ medicine["duration_days"] }},
+        start_date: {{ medicine["start_date"]|tojson }}
+    }
+
+    {% if not loop.last %},{% endif %}
+
+    {% endfor %}
+
+];
+
+
+// ========================================================
+// CLOCK
+// ========================================================
+
+function updateClock() {
+
+    const now = new Date();
+
+    const formatted = now.toLocaleString(
+        "en-IN",
+        {
+            timeZone: "Asia/Kolkata",
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        }
+    );
+
+    document.getElementById("clock").innerText =
+        "🇮🇳 IST: " + formatted;
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+
+// ========================================================
+// GET CURRENT IST DATE
+// ========================================================
+
+function getISTDateString() {
+
+    const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone: "Asia/Kolkata",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }
+    ).formatToParts(new Date());
+
+    let year = "";
+    let month = "";
+    let day = "";
+
+    parts.forEach(part => {
+
+        if (part.type === "year") {
+            year = part.value;
+        }
+
+        if (part.type === "month") {
+            month = part.value;
+        }
+
+        if (part.type === "day") {
+            day = part.value;
+        }
+
+    });
+
+    return `${year}-${month}-${day}`;
+}
+
+
+// ========================================================
+// GET CURRENT IST TIME HH:MM
+// ========================================================
+
+function getISTTime() {
+
+    return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+            timeZone: "Asia/Kolkata",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        }
+    ).format(new Date());
+
+}
+
+
+// ========================================================
+// CALCULATE DAYS BETWEEN DATES
+// ========================================================
+
+function getDayDifference(startDate, currentDate) {
+
+    const start = new Date(
+        startDate + "T00:00:00"
+    );
+
+    const current = new Date(
+        currentDate + "T00:00:00"
+    );
+
+    const difference =
+        current.getTime() - start.getTime();
+
+    return Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+    );
+}
+
+
+// ========================================================
+// CHECK WHETHER MEDICINE IS STILL ACTIVE
+// ========================================================
+
+function isMedicineActive(medicine) {
+
+    const today = getISTDateString();
+
+    const elapsedDays = getDayDifference(
+        medicine.start_date,
+        today
+    );
+
+    return (
+        elapsedDays >= 0 &&
+        elapsedDays < Number(medicine.duration_days)
+    );
+}
+
+
+// ========================================================
+// UNIQUE DAILY KEY
+//
+// Example:
+// medicine ID = 5
+// date = 2026-10-09
+//
+// Key:
+// medicine_taken_2026-10-09_5
+// ========================================================
+
+function getTodayKey(medicineId) {
+
+    return (
+        "medicine_taken_" +
+        getISTDateString() +
+        "_" +
+        medicineId
+    );
+
+}
+
+
+// ========================================================
+// CHECK IF MEDICINE WAS ALREADY TAKEN TODAY
+// ========================================================
+
+function isMedicineTakenToday(medicineId) {
+
+    return localStorage.getItem(
+        getTodayKey(medicineId)
+    ) === "true";
+
+}
+
+
+// ========================================================
+// MARK MEDICINE AS TAKEN TODAY
+// ========================================================
+
+function markMedicineTakenToday(medicineId) {
+
+    localStorage.setItem(
+        getTodayKey(medicineId),
+        "true"
+    );
+
+}
+
+
+// ========================================================
+// REMOVE OLD LOCAL STORAGE DATA
+//
+// Keeps localStorage clean.
+// ========================================================
+
+function cleanOldTakenRecords() {
+
+    const today = getISTDateString();
+
+    const keysToDelete = [];
+
+    for (
+        let i = 0;
+        i < localStorage.length;
+        i++
+    ) {
+
+        const key = localStorage.key(i);
+
+        if (
+            key &&
+            key.startsWith("medicine_taken_") &&
+            !key.includes(today)
+        ) {
+
+            keysToDelete.push(key);
+
+        }
+
+    }
+
+
+    keysToDelete.forEach(key => {
+
+        localStorage.removeItem(key);
+
+    });
+
+}
+
+cleanOldTakenRecords();
+
+
+// ========================================================
+// BROWSER NOTIFICATION PERMISSION
+// ========================================================
+
+async function enableNotifications() {
+
+    if (!("Notification" in window)) {
+
+        return false;
+
+    }
+
+
+    if (Notification.permission === "granted") {
+
+        return true;
+
+    }
+
+
+    if (Notification.permission !== "denied") {
+
+        const permission =
+            await Notification.requestPermission();
+
+        return permission === "granted";
+
+    }
+
+
+    return false;
+}
+
+
+// ========================================================
+// TEST NOTIFICATION
+// ========================================================
+
+async function testNotification() {
+
+    const status =
+        document.getElementById(
+            "notificationStatus"
+        );
+
+
+    if (!("Notification" in window)) {
+
+        status.innerText =
+            "❌ This browser does not support notifications.";
+
+        return;
+    }
+
+
+    const permission =
+        await Notification.requestPermission();
+
+
+    if (permission === "granted") {
+
+        new Notification(
+            "💊 Medicine Reminder",
             {
-                id: {{ medicine["id"] }},
-                name: {{ medicine["name"]|tojson }},
-                dosage: {{ medicine["dosage"]|tojson }},
-                time: {{ medicine["time"]|tojson }}
+                body:
+                    "✅ Device notification is working correctly!",
+                icon: "/static/icon.png"
             }
-
-            {% if not loop.last %},{% endif %}
-
-            {% endfor %}
-
-        ];
-
-
-
-        /* =====================================================
-           CLOCK
-           ===================================================== */
-
-        function updateClock() {
-
-            const now = new Date();
-
-            const options = {
-
-                timeZone: "Asia/Kolkata",
-
-                hour: "2-digit",
-
-                minute: "2-digit",
-
-                second: "2-digit",
-
-                hour12: true
-
-            };
-
-
-            const timeString =
-                new Intl.DateTimeFormat(
-                    "en-IN",
-                    options
-                ).format(now);
-
-
-            document.getElementById(
-                "clock"
-            ).textContent = timeString;
-
-        }
-
-
-        updateClock();
-
-        setInterval(
-            updateClock,
-            1000
         );
 
 
+        status.innerText =
+            "✅ Notification is enabled on this device.";
 
-        /* =====================================================
-           IST TIME
-           ===================================================== */
+    }
 
-        function getISTDate() {
+    else if (permission === "denied") {
 
-            return new Date(
+        status.innerText =
+            "❌ Notification permission is blocked. Enable notifications in browser settings.";
 
-                new Date().toLocaleString(
+    }
 
-                    "en-US",
+    else {
 
-                    {
-                        timeZone:
-                            "Asia/Kolkata"
-                    }
+        status.innerText =
+            "⚠️ Notification permission was not granted.";
 
-                )
+    }
 
-            );
-
-        }
+}
 
 
+// ========================================================
+// SEND MEDICINE NOTIFICATION
+// ========================================================
 
-        /* =====================================================
-           NOTIFICATION PERMISSION
-           ===================================================== */
+async function sendNotification(
+    title,
+    message
+) {
 
-        function enableNotifications() {
+    if (!("Notification" in window)) {
 
-            if (
-                "Notification" in window
-            ) {
+        return;
 
-                if (
-                    Notification.permission ===
-                    "default"
-                ) {
+    }
 
-                    Notification
-                        .requestPermission()
-                        .catch(
-                            function(error) {
 
-                                console.log(
-                                    "Notification permission error:",
-                                    error
-                                );
+    if (Notification.permission !== "granted") {
 
-                            }
-                        );
+        return;
 
-                }
+    }
 
+
+    try {
+
+        new Notification(
+            title,
+            {
+                body: message
             }
+        );
 
-        }
+    }
 
+    catch (error) {
 
-        enableNotifications();
+        console.error(
+            "Notification error:",
+            error
+        );
 
+    }
 
+}
 
-        /* =====================================================
-           BROWSER NOTIFICATION
-           ===================================================== */
 
-        function sendNotification(
-            medicineName,
-            dosage,
-            medicineTime
-        ) {
+// ========================================================
+// VOICE REMINDER
+// ========================================================
 
-            if (
-                "Notification" in window &&
-                Notification.permission ===
-                "granted"
-            ) {
+function speakReminder(
+    medicineName,
+    dosage
+) {
 
-                try {
+    if (
+        !("speechSynthesis" in window)
+    ) {
 
-                    new Notification(
-                        "💊 Medicine Reminder",
-                        {
+        return;
 
-                            body:
-                                medicineName +
-                                "\n" +
-                                dosage +
-                                "\nTime: " +
-                                medicineTime
+    }
 
-                        }
-                    );
 
-                }
+    speechSynthesis.cancel();
 
-                catch (error) {
 
-                    console.log(
-                        "Notification error:",
-                        error
-                    );
+    const message =
+        `Medicine reminder. Please take ${medicineName}. Dosage: ${dosage}.`;
 
-                }
 
-            }
+    const speech =
+        new SpeechSynthesisUtterance(message);
 
-        }
 
+    speech.rate = 0.9;
+    speech.pitch = 1;
 
 
-        /* =====================================================
-           VOICE REMINDER
-           ===================================================== */
+    speechSynthesis.speak(speech);
 
-        function speakReminder(
-            medicineName,
-            dosage
-        ) {
+}
 
-            if (
-                "speechSynthesis" in window
-            ) {
 
-                const message =
-                    "Medicine reminder. Please take " +
-                    medicineName +
-                    ". Dosage: " +
-                    dosage;
+// ========================================================
+// SHOW REMINDER
+// ========================================================
 
+function showReminder(data) {
 
-                const speech =
-                    new SpeechSynthesisUtterance(
-                        message
-                    );
-
-
-                speech.rate = 0.9;
-
-                speech.pitch = 1;
-
-
-                window.speechSynthesis.cancel();
-
-
-                window.speechSynthesis.speak(
-                    speech
-                );
-
-            }
-
-        }
-
-
-
-        /* =====================================================
-           ESCAPE HTML
-           ===================================================== */
-
-        function escapeHTML(value) {
-
-            if (
-                value === undefined ||
-                value === null
-            ) {
-
-                return "";
-
-            }
-
-
-            return String(value)
-
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
-
-        }
-
-
-
-        /* =====================================================
-           SHOW REMINDER
-           ===================================================== */
-
-        function showReminder(data) {
-
-            if (
-                !data ||
-                !data.active
-            ) {
-
-                return;
-
-            }
-
-
-            const reminderArea =
-                document.getElementById(
-                    "reminderArea"
-                );
-
-
-            reminderArea.innerHTML = `
-
-                <div class="reminder-card">
-
-                    <div class="reminder-title">
-
-                        🔔 Medicine Reminder
-
-                    </div>
-
-
-                    <div class="reminder-medicine">
-
-                        ${escapeHTML(
-                            data.medicine
-                        )}
-
-                    </div>
-
-
-                    <div class="reminder-details">
-
-                        Dosage:
-
-                        ${escapeHTML(
-                            data.dosage
-                        )}
-
-                        &nbsp; | &nbsp;
-
-                        Time:
-
-                        ${escapeHTML(
-                            data.time
-                        )}
-
-                    </div>
-
-
-                    <button
-                        class="take-btn"
-                        onclick="takeMedicine(${data.id}, this)"
-                    >
-
-                        ✓ Mark as Taken
-
-                    </button>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        /* =====================================================
-           REMINDER CONTROL
-           ===================================================== */
-
-        let lastReminderKey = "";
-
-        let takenReminderIds = new Set();
-
-
-
-        /* =====================================================
-           AUTOMATIC MEDICINE REMINDER
-           
-           ONLY ONE AUTOMATIC REMINDER SYSTEM IS USED.
-           ===================================================== */
-
-        function checkScheduledMedicines() {
-
-            if (
-                !medicines ||
-                medicines.length === 0
-            ) {
-
-                return;
-
-            }
-
-
-            const now = getISTDate();
-
-
-            const currentHour =
-                String(
-                    now.getHours()
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const currentMinute =
-                String(
-                    now.getMinutes()
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const currentTime =
-                currentHour +
-                ":" +
-                currentMinute;
-
-
-            const today =
-                now.getFullYear() +
-                "-" +
-                String(
-                    now.getMonth() + 1
-                ).padStart(
-                    2,
-                    "0"
-                ) +
-                "-" +
-                String(
-                    now.getDate()
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            medicines.forEach(
-                function(medicine) {
-
-                    if (
-                        medicine.time ===
-                        currentTime
-                    ) {
-
-
-                        const reminderKey =
-                            medicine.id +
-                            "_" +
-                            today +
-                            "_" +
-                            currentTime;
-
-
-                        /*
-                         * Do not show the same reminder
-                         * repeatedly.
-                         */
-
-                        if (
-                            lastReminderKey ===
-                            reminderKey
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * Do not show a reminder again
-                         * after it has been taken.
-                         */
-
-                        if (
-                            takenReminderIds.has(
-                                medicine.id
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        lastReminderKey =
-                            reminderKey;
-
-
-                        const reminderData = {
-
-                            active: true,
-
-                            id: medicine.id,
-
-                            medicine:
-                                medicine.name,
-
-                            dosage:
-                                medicine.dosage,
-
-                            time:
-                                medicine.time
-
-                        };
-
-
-                        showReminder(
-                            reminderData
-                        );
-
-
-                        sendNotification(
-
-                            medicine.name,
-
-                            medicine.dosage,
-
-                            medicine.time
-
-                        );
-
-
-                        speakReminder(
-
-                            medicine.name,
-
-                            medicine.dosage
-
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-
-
-
-        /* =====================================================
-           CHECK EVERY SECOND
-           ===================================================== */
-
-        checkScheduledMedicines();
-
-
-        setInterval(
-
-            checkScheduledMedicines,
-
-            1000
-
+    const area =
+        document.getElementById(
+            "reminderArea"
         );
 
 
+    area.innerHTML = `
 
-        /* =====================================================
-           TEST REMINDER
-           ===================================================== */
+        <div class="reminder-card">
 
-        function testReminder() {
+            <div class="reminder-title">
+                🔔 Medicine Reminder
+            </div>
 
-            fetch(
-                "/api/test"
-            )
+            <div class="reminder-details">
 
-            .then(
-                function(response) {
+                <strong>
+                    💊 ${data.medicine}
+                </strong>
 
-                    if (
-                        !response.ok
-                    ) {
+                <br>
 
-                        throw new Error(
-                            "Test reminder failed."
-                        );
+                Dosage:
+                ${data.dosage}
 
-                    }
+                <br>
 
+                Time:
+                ${data.time}
 
-                    return response.json();
+            </div>
 
-                }
-            )
+            <button
+                class="taken-btn"
+                onclick="takeMedicine(${data.id}, this)"
+            >
+                ✓ Mark as Taken
+            </button>
 
-            .then(
-                function(data) {
+        </div>
 
-                    /*
-                     * Reset test reminder state.
-                     */
+    `;
 
-                    lastReminderKey =
-                        "TEST_" +
-                        Date.now();
+}
 
 
-                    showReminder(
-                        data
-                    );
+// ========================================================
+// TEST REMINDER
+// ========================================================
+
+async function testReminder() {
+
+    try {
+
+        const response =
+            await fetch("/api/test");
 
 
-                    sendNotification(
-
-                        data.medicine,
-
-                        data.dosage,
-
-                        data.time
-
-                    );
+        const data =
+            await response.json();
 
 
-                    speakReminder(
-
-                        data.medicine,
-
-                        data.dosage
-
-                    );
-
-                }
-            )
-
-            .catch(
-                function(error) {
-
-                    console.error(
-                        error
-                    );
+        showReminder(data);
 
 
-                    alert(
-                        "Unable to start test reminder."
-                    );
+        await enableNotifications();
 
-                }
-            );
+
+        sendNotification(
+            "🧪 Test Medicine Reminder",
+            "This is a test reminder notification."
+        );
+
+
+        speakReminder(
+            data.medicine,
+            data.dosage
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Test reminder error:",
+            error
+        );
+
+        alert(
+            "Unable to start test reminder."
+        );
+
+    }
+
+}
+
+
+// ========================================================
+// MARK MEDICINE AS TAKEN
+// ========================================================
+
+async function takeMedicine(
+    id,
+    button
+) {
+
+
+    // ====================================================
+    // TEST REMINDER
+    // ====================================================
+
+    if (id === -1) {
+
+        // Stop voice
+        if (
+            "speechSynthesis" in window
+        ) {
+
+            speechSynthesis.cancel();
 
         }
 
 
+        // Immediately remove reminder
+        document.getElementById(
+            "reminderArea"
+        ).innerHTML = `
 
-        /* =====================================================
-           MARK MEDICINE AS TAKEN
-           
-           THIS IS THE IMPORTANT FIX.
-           ===================================================== */
+            <div class="success-message">
+                ✓ Test reminder marked as taken.
+            </div>
 
-        function takeMedicine(
-            id,
-            button
-        ) {
-
-            console.log(
-                "Mark as Taken clicked:",
-                id
-            );
+        `;
 
 
-            /*
-             * TEST REMINDER
-             */
+        try {
 
-            if (
-                Number(id) === -1
-            ) {
-
-                /*
-                 * Immediately clear reminder.
-                 */
-
-                document.getElementById(
-                    "reminderArea"
-                ).innerHTML = "";
-
-
-                /*
-                 * Stop speech.
-                 */
-
-                if (
-                    "speechSynthesis" in window
-                ) {
-
-                    window.speechSynthesis.cancel();
-
-                }
-
-
-                /*
-                 * Show success.
-                 */
-
-                const message =
-                    document.getElementById(
-                        "message"
-                    );
-
-
-                message.textContent =
-                    "✓ Test reminder marked as taken.";
-
-
-                message.style.display =
-                    "block";
-
-
-                /*
-                 * Clear server test reminder
-                 * in the background.
-                 */
-
-                fetch(
-                    "/api/take/-1",
-                    {
-                        method: "POST"
-                    }
-                )
-                .catch(
-                    function(error) {
-
-                        console.log(
-                            "Test reminder clear error:",
-                            error
-                        );
-
-                    }
-                );
-
-
-                return;
-
-            }
-
-
-
-            /*
-             * NORMAL MEDICINE
-             */
-
-            if (button) {
-
-                button.disabled = true;
-
-                button.textContent =
-                    "Saving...";
-
-            }
-
-
-            /*
-             * IMPORTANT:
-             * Clear the reminder immediately
-             * so it cannot remain stuck.
-             */
-
-            document.getElementById(
-                "reminderArea"
-            ).innerHTML = "";
-
-
-            /*
-             * Stop voice reminder.
-             */
-
-            if (
-                "speechSynthesis" in window
-            ) {
-
-                window.speechSynthesis.cancel();
-
-            }
-
-
-            /*
-             * Remember that this medicine
-             * has been taken during this
-             * page session.
-             */
-
-            takenReminderIds.add(
-                Number(id)
-            );
-
-
-            /*
-             * Send request to Flask.
-             */
-
-            fetch(
-                "/api/take/" + id,
+            await fetch(
+                "/api/take/-1",
                 {
+                    method: "POST"
+                }
+            );
 
+        }
+
+        catch (error) {
+
+            console.error(
+                "Test reminder error:",
+                error
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
+    // ====================================================
+    // REAL MEDICINE
+    // ====================================================
+
+    // VERY IMPORTANT:
+    // Save that today's dose has already been taken.
+    //
+    // This happens BEFORE the server request.
+    // Therefore the 1-second reminder loop cannot
+    // show the same medicine again.
+    // ====================================================
+
+    markMedicineTakenToday(id);
+
+
+    // Stop voice
+    if (
+        "speechSynthesis" in window
+    ) {
+
+        speechSynthesis.cancel();
+
+    }
+
+
+    // Immediately remove reminder
+    document.getElementById(
+        "reminderArea"
+    ).innerHTML = `
+
+        <div class="success-message">
+            ✓ Medicine marked as taken successfully.
+        </div>
+
+    `;
+
+
+    // Prevent double click
+    if (button) {
+
+        button.disabled = true;
+
+        button.innerText =
+            "Saving...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/take/${id}`,
+                {
                     method: "POST",
-
                     headers: {
                         "Content-Type":
                             "application/json"
                     }
-
                 }
-            )
-
-            .then(
-                function(response) {
-
-                    return response
-                        .json()
-                        .then(
-                            function(data) {
-
-                                return {
-
-                                    ok:
-                                        response.ok,
-
-                                    data:
-                                        data
-
-                                };
-
-                            }
-                        );
-
-                }
-            )
-
-            .then(
-                function(result) {
-
-                    console.log(
-                        "Mark as Taken response:",
-                        result.data
-                    );
+            );
 
 
-                    if (
-                        result.ok &&
-                        result.data.success
-                    ) {
+        const data =
+            await response.json();
 
 
-                        /*
-                         * SUCCESS
-                         */
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
-                        const message =
-                            document.getElementById(
-                                "message"
-                            );
-
-
-                        message.textContent =
-                            "✓ Medicine marked as taken successfully.";
-
-
-                        message.style.display =
-                            "block";
-
-
-                        /*
-                         * Reload page after saving.
-                         */
-
-                        setTimeout(
-                            function() {
-
-                                location.reload();
-
-                            },
-                            700
-                        );
-
-                    }
-
-                    else {
-
-
-                        /*
-                         * SERVER ERROR
-                         */
-
-                        console.error(
-                            "Server error:",
-                            result.data
-                        );
-
-
-                        /*
-                         * Keep reminder cleared.
-                         */
-
-                        if (button) {
-
-                            button.disabled =
-                                false;
-
-                            button.textContent =
-                                "✓ Mark as Taken";
-
-                        }
-
-
-                        alert(
-                            result.data.message ||
-                            "Could not mark medicine as taken."
-                        );
-
-                    }
-
-                }
-            )
-
-            .catch(
-                function(error) {
-
-                    console.error(
-                        "Connection error:",
-                        error
-                    );
-
-
-                    /*
-                     * Reminder stays cleared.
-                     */
-
-                    /*
-                     * Show error.
-                     */
-
-                    alert(
-                        "Could not connect to the server. Please try again."
-                    );
-
-                }
+            throw new Error(
+                data.message ||
+                "Unable to save medicine"
             );
 
         }
 
 
-    </script>
+        // Make absolutely sure it stays
+        // marked as taken for today.
+        markMedicineTakenToday(id);
+
+
+        // Reload only after successful
+        // history save.
+        setTimeout(
+            () => {
+                window.location.reload();
+            },
+            700
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Take medicine error:",
+            error
+        );
+
+
+        // Server failed, so allow the user
+        // to receive the reminder again.
+        localStorage.removeItem(
+            getTodayKey(id)
+        );
+
+
+        document.getElementById(
+            "reminderArea"
+        ).innerHTML = `
+
+            <div class="success-message"
+                 style="
+                    background:#fff0f0;
+                    color:#b83232;
+                    border-color:#f3cccc;
+                 ">
+
+                ❌ Could not save the medicine.
+                Please try again.
+
+            </div>
+
+        `;
+
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.innerText =
+                "✓ Mark as Taken";
+
+        }
+
+    }
+
+}
+
+
+// ========================================================
+// AUTOMATIC MEDICINE REMINDER
+// ========================================================
+
+let lastReminderKey = "";
+
+function checkScheduledMedicines() {
+
+    const currentTime =
+        getISTTime();
+
+    const today =
+        getISTDateString();
+
+
+    medicines.forEach(
+        medicine => {
+
+
+            // --------------------------------------------
+            // 1. Check duration
+            // --------------------------------------------
+
+            if (
+                !isMedicineActive(medicine)
+            ) {
+
+                return;
+
+            }
+
+
+            // --------------------------------------------
+            // 2. Check if already taken today
+            // --------------------------------------------
+
+            if (
+                isMedicineTakenToday(
+                    medicine.id
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            // --------------------------------------------
+            // 3. Check exact reminder time
+            // --------------------------------------------
+
+            if (
+                medicine.time !== currentTime
+            ) {
+
+                return;
+
+            }
+
+
+            // --------------------------------------------
+            // 4. Unique key for today's reminder
+            // --------------------------------------------
+
+            const reminderKey =
+                `${today}_${medicine.id}`;
+
+
+            // --------------------------------------------
+            // 5. Do not trigger repeatedly
+            // --------------------------------------------
+
+            if (
+                lastReminderKey === reminderKey
+            ) {
+
+                return;
+
+            }
+
+
+            lastReminderKey =
+                reminderKey;
+
+
+            const reminderData = {
+
+                active: true,
+
+                id: medicine.id,
+
+                medicine: medicine.name,
+
+                dosage: medicine.dosage,
+
+                time: medicine.time
+
+            };
+
+
+            // --------------------------------------------
+            // 6. Show reminder
+            // --------------------------------------------
+
+            showReminder(
+                reminderData
+            );
+
+
+            // --------------------------------------------
+            // 7. Notification
+            // --------------------------------------------
+
+            sendNotification(
+                "💊 Medicine Reminder",
+                `${medicine.name} - ${medicine.dosage}`
+            );
+
+
+            // --------------------------------------------
+            // 8. Voice
+            // --------------------------------------------
+
+            speakReminder(
+                medicine.name,
+                medicine.dosage
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================================
+// CHECK EVERY SECOND
+// ========================================================
+
+setInterval(
+    checkScheduledMedicines,
+    1000
+);
+
+
+// Check immediately after page loads
+checkScheduledMedicines();
+
+
+</script>
 
 </body>
 
